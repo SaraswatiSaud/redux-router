@@ -1,27 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import allreducers from './reducers/indexReducer';
 // BrowserRouter interacts with history library and decides what to show on screen
 import { BrowserRouter, Route } from 'react-router-dom';
+import PostIndex from './components/postsIndex';
+import promise from 'redux-promise';
 
-class Hello extends React.Component {
-  render(){
-    return(<div>Hello</div>)
-  }
-}
-
-class Goodbye extends React.Component {
-  render(){
-    return(<div>Goodbye</div>)
-  }
-}
+const createStorewithMidddleware = applyMiddleware(promise)(createStore);
 
 ReactDOM.render(
-  <BrowserRouter>
-    <div>
-      Header
-      <Route path='/hello' component={Hello} />
-      <Route path='/goodbye' component={Goodbye} />
-    </div>
-  </BrowserRouter>
+  <Provider store={createStorewithMidddleware(allreducers)}>
+    <BrowserRouter>
+      <div>
+        <Route path='/' component={PostIndex} />
+        </div>
+    </BrowserRouter>
+  </Provider>
 , document.getElementById('root'));
